@@ -1,0 +1,19 @@
+{
+  
+  "name": "TensorFlow Environment",
+  "image": "tensorflow/tensorflow:latest",  // Or a specific version
+  "workspaceFolder": "/workspace",
+  "runArgs": [
+    "--gpus", "all",  // Omit if no GPU needed
+    "-v", "${localWorkspaceFolder}:/workspace"
+  ],
+
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+
+  "extensions": [
+    "ms-python.python"
+  ]
+
+}
