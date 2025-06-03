@@ -25,7 +25,7 @@ Each .py file includes the models, while the python notebooks shows the results
 
 3. Exanding Corpora: This dataset is comprised of a relatively modest ~3000 headlines. This relatively limited dataset may constrain performance, and lead to overfitting. 
   
-4. Contemporary NLP approaches like sentence-transformers with an attached multi-layered perception and fine tuned models such as FinBERT may warrant further investigation. These contemporary methods may capture more nuances in Financial sentiment more effectiverly than traditional LSTM approaches.
+4. Contemporary NLP approaches like sentence-transformers with an attached multi-layered percepetron and fine tuned models such as FinBERT may warrant further investigation. These contemporary methods may capture more nuances in Financial sentiment more effectiverly than traditional LSTM approaches.
 
 5. Clickbait? Headlines may not include all polarity and semantic information to capture the full sentiment of an article. Hence, in future models it may be worth including the body. 
 
