@@ -16,7 +16,7 @@ Each .py file includes the models, while the python notebooks shows the results
 
 ## What's next?
 
-1. Domain-Specific Embeddings: For the LSTM model utilizing pre-trained GloVe embeddings, we employed globally trained GloVe embedding. This approach does not account for domain-specific language. Ideally, embeddings should be fine-tuned on financial corpora to better capture the nuances of financial jargon and improve the model’s contextual understanding.
+1. Domain-Specific Embeddings: For the LSTM model utilizing pre-trained embeddings, we employed a globally trained GloVe embedding. This approach does not account for domain-specific language. Ideally, embeddings should be fine-tuned on financial corpora to better capture the nuances of financial jargon and improve the model’s contextual understanding.
 
 2. Specialized Polarity Lexicons: Constructing a domain-specific semantic polarity lexicon could further support sentiment analysis tasks. Prior work by Malo, Pekka, and Sinha demonstrates that combining Support Vector Machines with the MPQA subjectivity lexicon yields strong results in financial contexts. For instance, while not a financial example, "not bad" could be considered "fine" whilst in other contexts - "terrible"
    
