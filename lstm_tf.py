@@ -1,36 +1,40 @@
 import tensorflow as tf
-from keras.layers import LSTM, Dense, Embedding, Dropout, Input
+from dataclasses import dataclass
+from tensorflow.keras.layers import Dense, Dropout, Embedding, LayerNormalization, LSTM
 
-class CuDNNLSTM_keras(tf.keras.Model):
-    
-    def __init__(self, vocab_size, embed_dim, max_len, lstm1_dim, lstm2_dim, lookup_table, dropout, output_dim = 3):
+
+@dataclass
+class StackedLSTMConfig:
+    vocab_size: int
+    embed_dim: int
+    lstm1_dim: int
+    lstm2_dim: int
+    lookup_table: object
+    dropout_rate: float
+    output_dim: int
+
+
+class StackedLSTM(tf.keras.Model):
+    """Two-layer stacked LSTM with pretrained embeddings for sequence classification."""
+
+    def __init__(self, config: StackedLSTMConfig) -> None:
         super().__init__()
-        self.max_len = max_len
-         
-        #model
-        self.embed_layer = Embedding(
-
-            vocab_size, 
-            embed_dim, 
-            weights = [lookup_table], 
-            input_length = max_len, 
-            trainable = False, 
-            name = "Embed_Layer"
-            
+        self.embed = Embedding(
+            config.vocab_size,
+            config.embed_dim,
+            weights=[config.lookup_table],
+            trainable=False,
         )
-        
-        self.lstm1 = LSTM(lstm1_dim, return_sequences = True, name = "Layer_1")
-        self.lstm2 = LSTM(lstm2_dim, return_sequences = False, name = "Layer_2")
-        self.dense = Dense(output_dim, activation = 'softmax', name = "Dense")
-        self.dropout = Dropout(dropout)
+        self.lstm1 = LSTM(config.lstm1_dim, return_sequences=True)
+        self.norm = LayerNormalization()
+        self.dropout = Dropout(config.dropout_rate)
+        self.lstm2 = LSTM(config.lstm2_dim, return_sequences=False)
+        self.classifier = Dense(config.output_dim, activation="softmax")
 
-    def call(self, input_tensor):
-        
-        embdedding_layer = self.embed_layer(input_tensor)    
-        lstm1_out = self.lstm1(embdedding_layer)
-        lstm2_out = self.lstm2(lstm1_out)
-        output = self.dense(lstm2_out)
-        
-        return output
-
-
+    def call(self, inputs: tf.Tensor, training: bool) -> tf.Tensor:
+        x = self.embed(inputs)
+        x = self.lstm1(x, training=training)
+        x = self.norm(x)
+        x = self.dropout(x, training=training)
+        x = self.lstm2(x, training=training)
+        return self.classifier(x)
